@@ -1,0 +1,290 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{font-family:'JetBrains Mono',monospace;background:#09090f;color:#e2e8f0;min-height:600px;border-radius:12px;overflow:hidden;font-size:12px}
+header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid #1d1d2e;background:rgba(9,9,15,.9)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#e2e8f0}.logo b{color:#00ff88}
+.hbar{display:flex;gap:16px;font-size:10px;color:#4a5568}
+.dot{width:5px;height:5px;border-radius:50%;background:#4a5568;display:inline-block;margin-right:4px}
+.dot.on{background:#00ff88;box-shadow:0 0 6px #00ff88;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.layout{display:grid;grid-template-columns:180px 1fr 220px;min-height:540px}
+nav{border-right:1px solid #1d1d2e;padding:14px 10px;display:flex;flex-direction:column;gap:4px}
+.nl{font-size:9px;letter-spacing:2px;color:#4a5568;text-transform:uppercase;padding:8px 8px 4px}
+.ni{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:5px;cursor:pointer;font-size:11px;color:#4a5568;border:1px solid transparent;transition:all .2s}
+.ni:hover{color:#e2e8f0;background:#111119}.ni.on{color:#00ff88;border-color:rgba(0,255,136,.2);background:rgba(0,255,136,.05)}
+main{padding:20px 24px;overflow-y:auto;max-height:580px}
+.ph{display:none}.ph.on{display:block}
+.sh{margin-bottom:18px}.sh h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px;color:#e2e8f0}.sh p{color:#4a5568;font-size:11px;line-height:1.6}
+.card{background:#111119;border:1px solid #1d1d2e;border-radius:8px;padding:14px;margin-bottom:10px}
+.ct{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;margin-bottom:10px;color:#e2e8f0}
+.tc{background:#111119;border:1px solid #1d1d2e;border-radius:8px;overflow:hidden;margin-bottom:10px}
+.th{padding:10px 16px;border-bottom:1px solid #1d1d2e;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.01)}
+.tl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a5568}.tt{font-size:11px;color:#f59e0b;font-weight:600}
+.tb{padding:14px}
+.td{font-size:13px;line-height:1.9;color:#4a5568;margin-bottom:12px}.td .ty{color:#00ff88}.td .cu{color:#e2e8f0;text-decoration:underline;text-decoration-color:#00ff88}.td .er{color:#ef4444;background:rgba(239,68,68,.1)}
+textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid #1d1d2e;border-radius:5px;color:#e2e8f0;font-family:monospace;font-size:12px;padding:10px;resize:none;height:80px;outline:none}
+textarea:focus{border-color:#00ff88}
+.mf{width:100%;height:200px;background:rgba(0,0,0,.4);border:1px solid #1d1d2e;border-radius:5px;position:relative;overflow:hidden;cursor:crosshair}
+.mtg{position:absolute;width:44px;height:44px;border-radius:50%;background:rgba(0,255,136,.12);border:2px solid #00ff88;transform:translate(-50%,-50%);cursor:pointer;transition:background .15s,transform .1s}
+.mtg.ck{background:#00ff88;transform:translate(-50%,-50%) scale(.8)}
+.mtrail{position:absolute;width:3px;height:3px;border-radius:50%;background:rgba(0,255,136,.4);pointer-events:none;transform:translate(-50%,-50%)}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.mc{background:rgba(0,0,0,.3);border:1px solid #1d1d2e;border-radius:7px;padding:11px}
+.ml{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#4a5568;margin-bottom:4px}
+.mv{font-size:18px;font-weight:600;color:#00ff88}.mu{font-size:10px;color:#4a5568;margin-left:2px}
+.ms{display:flex;gap:4px;margin:8px 0}
+.mb{flex:1;padding:7px 3px;border:1px solid #1d1d2e;border-radius:6px;background:#111119;color:#4a5568;font-family:monospace;font-size:9px;cursor:pointer;text-align:center;transition:all .2s}
+.mb:hover{border-color:#7c3aed;color:#e2e8f0}.mb.sl{border-color:#00ff88;background:rgba(0,255,136,.08);color:#00ff88}
+.me{font-size:15px;display:block;margin-bottom:2px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:5px;font-family:monospace;font-size:11px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.bp{background:#00ff88;color:#000}.bp:hover{background:#00cc6e}
+.bsec{background:transparent;color:#e2e8f0;border:1px solid #1d1d2e}.bsec:hover{border-color:#4a5568}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.rp{border-left:1px solid #1d1d2e;padding:14px 12px;overflow-y:auto;max-height:580px}
+.pl{font-size:9px;letter-spacing:2px;color:#4a5568;text-transform:uppercase;margin-bottom:8px}
+.lf{display:flex;flex-direction:column;gap:3px;max-height:200px;overflow-y:auto}
+.fi{font-size:9px;color:#4a5568;padding:3px 6px;background:rgba(0,0,0,.3);border-radius:3px;border-left:2px solid #1d1d2e}
+.fi.k{border-left-color:#7c3aed}.fi.mo{border-left-color:#00ff88}.fi.pa{border-left-color:#f59e0b}
+.sc{height:55px;display:flex;align-items:flex-end;gap:2px}
+.cb{flex:1;background:rgba(0,255,136,.18);border-radius:1px 1px 0 0;min-height:2px;transition:height .3s}
+.sep{height:1px;background:#1d1d2e;margin:12px 0}
+.cb2{background:#111119;border:1px solid #1d1d2e;border-radius:7px;padding:10px;margin-bottom:6px}
+.cx{background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.2);border-radius:7px;padding:14px;margin-bottom:10px}
+.cl{list-style:none}.cl li{padding:4px 0;font-size:11px;color:#e2e8f0;display:flex;gap:8px}.cl li::before{content:'→';color:#00ff88}
+.cr{display:flex;align-items:center;gap:10px;margin:7px 0;cursor:pointer;font-size:11px;color:#e2e8f0}
+input[type=checkbox]{accent-color:#00ff88;cursor:pointer;width:13px;height:13px}
+input[type=text],input[type=number],select{background:rgba(0,0,0,.4);border:1px solid #1d1d2e;border-radius:5px;color:#e2e8f0;font-family:monospace;font-size:11px;padding:7px 10px;width:100%;outline:none;margin-bottom:8px}
+input:focus,select:focus{border-color:#00ff88}
+select option{background:#111119}
+lbl{font-size:10px;color:#4a5568;display:block;margin-bottom:3px}
+.st{display:flex;flex-direction:column;gap:0;margin-bottom:16px}
+.sp{display:flex;gap:10px;padding:10px 0;position:relative}
+.sp:not(:last-child)::after{content:'';position:absolute;left:12px;top:38px;bottom:0;width:1px;background:#1d1d2e}
+.sn{width:24px;height:24px;border-radius:50%;border:1px solid #1d1d2e;display:flex;align-items:center;justify-content:center;font-size:10px;color:#4a5568;flex-shrink:0;background:#111119}
+.sp.dn .sn{background:rgba(0,255,136,.1);border-color:#00ff88;color:#00ff88}
+.sc2{padding-top:3px}.stit{font-size:11px;font-weight:600;margin-bottom:1px;color:#e2e8f0}.sdsc{font-size:10px;color:#4a5568}
+.ep{background:rgba(0,0,0,.5);border:1px solid #1d1d2e;border-radius:5px;padding:10px;font-size:9px;color:#00ff88;max-height:140px;overflow-y:auto;white-space:pre;font-family:monospace}
+.row{display:flex;gap:6px}.mt12{margin-top:12px}
+.si{background:#111119;border:1px solid #1d1d2e;border-radius:7px;padding:10px;margin-bottom:8px;text-align:center}
+.sil{font-size:9px;color:#4a5568;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.siv{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#00ff88}
+</style>
+
+<div class="app">
+<header>
+  <div class="logo">Behavior<b>Lab</b></div>
+  <div class="hbar">
+    <div><span class="dot" id="rdot"></span><span id="rst">ОЖИДАНИЕ</span></div>
+    <div>СОБЫТИЯ: <span id="ecnt">0</span></div>
+    <div>ID: <span id="sid">—</span></div>
+  </div>
+</header>
+<div class="layout">
+<nav>
+  <div class="nl">Протокол</div>
+  <div class="ni on" data-p="consent" onclick="go('consent')">📋 Согласие</div>
+  <div class="ni" data-p="profile" onclick="go('profile')">👤 Профиль</div>
+  <div class="ni" data-p="baseline" onclick="go('baseline')">📊 Базовая линия</div>
+  <div class="ni" data-p="mood" onclick="go('mood')">🧠 Состояние</div>
+  <div class="ni" data-p="typing" onclick="go('typing')">⌨️ Печать</div>
+  <div class="ni" data-p="mouse" onclick="go('mouse')">🖱️ Мышь</div>
+  <div class="ni" data-p="results" onclick="go('results')">💾 Результат</div>
+  <div class="sep"></div>
+  <div class="nl">Сессия</div>
+  <div class="si"><div class="sil">Участник</div><div class="siv" id="sstt">—</div></div>
+  <div class="cb2"><div class="ml">Событий</div><div class="mv" id="sevt">0</div></div>
+</nav>
+<main>
+
+<div class="ph on" id="ph-consent">
+  <div class="sh"><h2>Информированное согласие</h2><p>Прочитайте перед началом исследования</p></div>
+  <div class="cx"><div class="ct">🔬 Что мы собираем</div><ul class="cl"><li>Динамику нажатий клавиш и паузы</li><li>Движения мыши (координаты, скорость)</li><li>Паттерны кликов и ошибки</li><li>Самооценку психологического состояния</li></ul></div>
+  <div class="cx"><div class="ct">🔒 Как используются данные</div><ul class="cl"><li>Только для исследовательских целей</li><li>Данные анонимизируются</li><li>Можно выйти в любой момент</li><li>Нет передачи третьим лицам</li></ul></div>
+  <label class="cr"><input type="checkbox" id="c1"> Я понимаю, что мои паттерны будут записаны</label>
+  <label class="cr"><input type="checkbox" id="c2"> Я участвую добровольно</label>
+  <label class="cr"><input type="checkbox" id="c3"> Мне исполнилось 18 лет</label>
+  <div class="mt12"><button class="btn bp" onclick="chkC()">Продолжить →</button></div>
+</div>
+
+<div class="ph" id="ph-profile">
+  <div class="sh"><h2>Профиль участника</h2><p>Демографические данные для контроля переменных</p></div>
+  <div class="card">
+    <lbl>Псевдоним</lbl><input type="text" id="nick" placeholder="user_42">
+    <lbl>Возраст</lbl><input type="number" id="age" placeholder="25" min="18" max="80">
+    <lbl>Рабочая рука</lbl><select id="hand"><option value="">— выберите —</option><option value="right">Правая</option><option value="left">Левая</option><option value="both">Обе</option></select>
+    <lbl>Часов сна прошлой ночью</lbl><input type="number" id="slp" placeholder="7" min="0" max="14">
+    <lbl>Кофеин сегодня?</lbl><select id="caf"><option value="">—</option><option value="no">Нет</option><option value="y1">1 порция</option><option value="y2">2+</option></select>
+  </div>
+  <div class="row"><button class="btn bsec" onclick="go('consent')">← Назад</button><button class="btn bp" onclick="savePrf()">Продолжить →</button></div>
+</div>
+
+<div class="ph" id="ph-baseline">
+  <div class="sh"><h2>Базовая линия</h2><p>60 секунд в обычном темпе — пишите и двигайте мышью</p></div>
+  <div class="tc">
+    <div class="th"><span class="tl">Свободная активность</span><span class="tt" id="blt">60 сек</span></div>
+    <div class="tb">
+      <textarea id="bltxt" placeholder="Пишите что угодно здесь..."></textarea>
+      <div class="mf" id="blf" style="margin-top:8px"><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#4a5568;font-size:11px;text-align:center;pointer-events:none">Двигайте мышью здесь</div></div>
+    </div>
+  </div>
+  <div class="mg">
+    <div class="mc"><div class="ml">Скорость мыши</div><div class="mv"><span id="bmsp">—</span><span class="mu">px/s</span></div></div>
+    <div class="mc"><div class="ml">IKI средний</div><div class="mv"><span id="biki">—</span><span class="mu">мс</span></div></div>
+  </div>
+  <div class="row"><button class="btn bsec" onclick="go('profile')">← Назад</button><button class="btn bp" id="blbtn" onclick="startBL()">▶ Начать запись</button></div>
+</div>
+
+<div class="ph" id="ph-mood">
+  <div class="sh"><h2>Текущее состояние</h2><p>Оцените как себя чувствуете прямо сейчас — это ground truth</p></div>
+  <div class="card"><div class="ct">😌 Уровень стресса</div><div class="ms" id="sc-stress"><button class="mb" data-v="1" onclick="setM('stress',1)"><span class="me">😌</span>1</button><button class="mb" data-v="2" onclick="setM('stress',2)"><span class="me">🙂</span>2</button><button class="mb" data-v="3" onclick="setM('stress',3)"><span class="me">😐</span>3</button><button class="mb" data-v="4" onclick="setM('stress',4)"><span class="me">😟</span>4</button><button class="mb" data-v="5" onclick="setM('stress',5)"><span class="me">😰</span>5</button></div></div>
+  <div class="card"><div class="ct">⚡ Уровень энергии</div><div class="ms" id="sc-energy"><button class="mb" data-v="1" onclick="setM('energy',1)"><span class="me">🪫</span>1</button><button class="mb" data-v="2" onclick="setM('energy',2)"><span class="me">😴</span>2</button><button class="mb" data-v="3" onclick="setM('energy',3)"><span class="me">🙂</span>3</button><button class="mb" data-v="4" onclick="setM('energy',4)"><span class="me">😊</span>4</button><button class="mb" data-v="5" onclick="setM('energy',5)"><span class="me">🔋</span>5</button></div></div>
+  <div class="card"><div class="ct">🎯 Концентрация</div><div class="ms" id="sc-focus"><button class="mb" data-v="1" onclick="setM('focus',1)"><span class="me">🌀</span>1</button><button class="mb" data-v="2" onclick="setM('focus',2)"><span class="me">😵</span>2</button><button class="mb" data-v="3" onclick="setM('focus',3)"><span class="me">🤔</span>3</button><button class="mb" data-v="4" onclick="setM('focus',4)"><span class="me">😤</span>4</button><button class="mb" data-v="5" onclick="setM('focus',5)"><span class="me">🎯</span>5</button></div></div>
+  <div class="row"><button class="btn bsec" onclick="go('baseline')">← Назад</button><button class="btn bp" onclick="saveMood()">Продолжить →</button></div>
+</div>
+
+<div class="ph" id="ph-typing">
+  <div class="sh"><h2>Задача: набор текста</h2><p>Перепечатайте текст ниже в обычном темпе</p></div>
+  <div class="tc">
+    <div class="th"><span class="tl">⌨️ Typing task</span><span class="tt" id="tytm">—</span></div>
+    <div class="tb">
+      <div class="td" id="txd"></div>
+      <textarea id="txi" placeholder="Начните набирать..." oninput="procTy()" onkeydown="kd(event)" onkeyup="ku(event)"></textarea>
+    </div>
+  </div>
+  <div class="mg">
+    <div class="mc"><div class="ml">WPM</div><div class="mv" id="wpm">—</div></div>
+    <div class="mc"><div class="ml">Точность</div><div class="mv"><span id="acc">—</span><span class="mu">%</span></div></div>
+    <div class="mc"><div class="ml">Backspace</div><div class="mv" id="bsc">0</div></div>
+    <div class="mc"><div class="ml">Ср. IKI</div><div class="mv"><span id="iki">—</span><span class="mu">мс</span></div></div>
+  </div>
+  <div class="row"><button class="btn bsec" onclick="go('mood')">← Назад</button><button class="btn bp" id="tybtn" onclick="startTy()">▶ Начать</button></div>
+</div>
+
+<div class="ph" id="ph-mouse">
+  <div class="sh"><h2>Задача: точность мыши</h2><p>Кликайте на цели как можно быстрее. 20 целей.</p></div>
+  <div class="tc">
+    <div class="th"><span class="tl">🖱️ Fitts' task</span><span style="font-size:10px;color:#4a5568">Целей: <span id="tcnt">0</span>/20</span></div>
+    <div class="tb">
+      <div class="mf" id="mtf">
+        <div id="mtt" class="mtg" style="display:none"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#4a5568;font-size:11px;text-align:center" id="mhint">Нажмите "Начать"</div>
+      </div>
+    </div>
+  </div>
+  <div class="mg">
+    <div class="mc"><div class="ml">Реакция</div><div class="mv"><span id="reac">—</span><span class="mu">мс</span></div></div>
+    <div class="mc"><div class="ml">Тремор σ</div><div class="mv"><span id="trem">—</span></div></div>
+    <div class="mc"><div class="ml">Прямолинейность</div><div class="mv"><span id="str">—</span><span class="mu">%</span></div></div>
+    <div class="mc"><div class="ml">Промахов</div><div class="mv" id="mss">0</div></div>
+  </div>
+  <div class="row"><button class="btn bsec" onclick="go('typing')">← Назад</button><button class="btn bp" id="moubtn" onclick="startMou()">▶ Начать</button></div>
+</div>
+
+<div class="ph" id="ph-results">
+  <div class="sh"><h2>Данные собраны ✓</h2><p>Экспортируйте для ML-обучения</p></div>
+  <div class="st">
+    <div class="sp dn"><div class="sn">✓</div><div class="sc2"><div class="stit">Согласие</div><div class="sdsc">Получено</div></div></div>
+    <div class="sp dn"><div class="sn">✓</div><div class="sc2"><div class="stit">Профиль</div><div class="sdsc" id="rprf">—</div></div></div>
+    <div class="sp dn"><div class="sn">✓</div><div class="sc2"><div class="stit">Метки состояния</div><div class="sdsc" id="rmood">—</div></div></div>
+    <div class="sp dn"><div class="sn">✓</div><div class="sc2"><div class="stit">Keystroke данные</div><div class="sdsc" id="rtyp">—</div></div></div>
+    <div class="sp dn"><div class="sn">✓</div><div class="sc2"><div class="stit">Mouse данные</div><div class="sdsc" id="rmou">—</div></div></div>
+  </div>
+  <div class="card"><div class="ct">📦 JSON превью</div><div class="ep" id="epv">—</div></div>
+  <div class="row mt12">
+    <button class="btn bp" onclick="dlJSON()">⬇ JSON</button>
+    <button class="btn bsec" onclick="dlCSV()">⬇ CSV</button>
+    <button class="btn bsec" onclick="resetApp()">↩ Новая сессия</button>
+  </div>
+</div>
+
+</main>
+<aside class="rp">
+  <div class="pl">Скорость мыши</div>
+  <div class="sc" id="spch"></div>
+  <div style="font-size:9px;color:#4a5568;margin-bottom:10px;margin-top:4px">Последние 20 замеров</div>
+  <div class="sep"></div>
+  <div class="pl">События</div>
+  <div class="lf" id="lf"><div class="fi">Ожидание...</div></div>
+  <div class="sep"></div>
+  <div class="pl">Признаки</div>
+  <div class="cb2"><div class="ml">Mouse speed σ</div><div style="font-size:11px;color:#e2e8f0" id="fms">—</div></div>
+  <div class="cb2"><div class="ml">Backspace rate</div><div style="font-size:11px;color:#e2e8f0" id="fbr">—</div></div>
+  <div class="cb2"><div class="ml">Паузы &gt;500мс</div><div style="font-size:11px;color:#e2e8f0" id="fpa">—</div></div>
+  <div class="cb2"><div class="ml">IKI σ</div><div style="font-size:11px;color:#e2e8f0" id="fiv">—</div></div>
+</aside>
+</div>
+</div>
+
+<script>
+const TXT="Исследования показывают, что паттерны поведения человека за компьютером несут информацию о его психологическом состоянии. Скорость набора текста, точность движений мыши и частота ошибок могут отражать уровень стресса, усталости и концентрации.";
+const SES={id:'SES_'+Math.random().toString(36).substr(2,8).toUpperCase(),startTime:Date.now(),participant:{},labels:{},events:{keyboard:[],mouse:[],clicks:[]},features:{},tasks:{}};
+let rec=false,tyStart=null,lastKey=null,IKI=[],BSC=0,tyOn=false;
+let mtCnt=0,mtMiss=0,htimes=[],mtTime=null,mouOn=false,seg=[];
+let blOn=false,blCd=60,blIv=null;
+let lmp=null,lmt=null,speeds=[],spBuf=[];
+let MV={stress:null,energy:null,focus:null};
+let tc=0;
+
+const avg=a=>a.length?a.reduce((x,y)=>x+y)/a.length:0;
+const sd=a=>{if(a.length<2)return 0;const m=avg(a);return Math.sqrt(a.reduce((x,y)=>x+(y-m)**2)/a.length)};
+function upd(){const t=SES.events.keyboard.length+SES.events.mouse.length+SES.events.clicks.length;document.getElementById('ecnt').textContent=t;document.getElementById('sevt').textContent=t}
+function setRec(v){rec=v;document.getElementById('rdot').classList.toggle('on',v);document.getElementById('rst').textContent=v?'ЗАПИСЬ':'ОЖИДАНИЕ'}
+function feed(txt,cls=''){const f=document.getElementById('lf'),el=document.createElement('div');el.className='fi '+cls;el.textContent=new Date().toTimeString().substr(0,8)+' '+txt;f.insertBefore(el,f.firstChild);if(f.children.length>18)f.removeChild(f.lastChild)}
+function go(p){document.querySelectorAll('.ph').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));document.getElementById('ph-'+p).classList.add('on');document.querySelector('[data-p="'+p+'"]').classList.add('on')}
+function chkC(){if(!document.getElementById('c1').checked||!document.getElementById('c2').checked||!document.getElementById('c3').checked){alert('Подтвердите все пункты');return}SES.consentTime=Date.now();go('profile')}
+function savePrf(){const n=document.getElementById('nick').value,a=document.getElementById('age').value;if(!n||!a){alert('Заполните псевдоним и возраст');return}SES.participant={nickname:n,age:+a,handedness:document.getElementById('hand').value,sleep:+document.getElementById('slp').value||null,caffeine:document.getElementById('caf').value};document.getElementById('sstt').textContent=n;go('baseline')}
+function startBL(){if(blOn)return;blOn=true;setRec(true);feed('Базовая линия начата','mo');document.getElementById('blbtn').disabled=true;document.getElementById('blbtn').textContent='Запись...';blCd=60;blIv=setInterval(()=>{blCd--;document.getElementById('blt').textContent=blCd+' сек';if(blCd<=0){clearInterval(blIv);blOn=false;if(IKI.length){SES.tasks.baseline_iki=avg(IKI);document.getElementById('biki').textContent=Math.round(avg(IKI))}if(speeds.length){SES.tasks.baseline_ms=avg(speeds);document.getElementById('bmsp').textContent=Math.round(avg(speeds))}document.getElementById('blbtn').textContent='✓ Записано';feed('Базовая линия OK','k');setTimeout(()=>go('mood'),700)}},1000)}
+function setM(t,v){MV[t]=v;document.getElementById('sc-'+t).querySelectorAll('.mb').forEach(b=>b.classList.toggle('sl',+b.dataset.v===v))}
+function saveMood(){if(MV.stress===null||MV.energy===null||MV.focus===null){alert('Оцените все три параметра');return}SES.labels={...MV,ts:Date.now()};document.getElementById('sstt').textContent='S'+MV.stress+'E'+MV.energy+'F'+MV.focus;feed('Метки: S='+MV.stress+' E='+MV.energy+' F='+MV.focus,'k');IKI=[];BSC=0;go('typing');document.getElementById('txd').textContent=TXT}
+function startTy(){if(tyOn)return;tyOn=true;tyStart=Date.now();lastKey=null;IKI=[];BSC=0;document.getElementById('txi').value='';document.getElementById('txi').focus();document.getElementById('tybtn').disabled=true;document.getElementById('tybtn').textContent='Запись...';setRec(true);feed('Задача печати начата','k');const i=setInterval(()=>{if(!tyOn){clearInterval(i);return}const e=Math.floor((Date.now()-tyStart)/1000);document.getElementById('tytm').textContent=Math.floor(e/60)+':'+String(e%60).padStart(2,'0')},500)}
+function kd(e){if(!tyOn)return;const now=Date.now();SES.events.keyboard.push({t:now,k:e.key==='Backspace'?'BS':e.key.length===1?e.key:e.key,tp:'d'});if(e.key==='Backspace'){BSC++;document.getElementById('bsc').textContent=BSC;document.getElementById('fbr').textContent=(BSC/Math.max(1,SES.events.keyboard.length)*100).toFixed(1)+'%';feed('Backspace #'+BSC,'pa')}if(lastKey!==null){const iv=now-lastKey;IKI.push(iv);if(iv>500)feed('Пауза '+iv+'мс','pa');document.getElementById('iki').textContent=Math.round(avg(IKI));document.getElementById('fiv').textContent=Math.round(sd(IKI))+'мс';document.getElementById('fpa').textContent=IKI.filter(x=>x>500).length}lastKey=now;upd()}
+function ku(e){if(!tyOn)return;SES.events.keyboard.push({t:Date.now(),k:e.key,tp:'u'})}
+function procTy(){if(!tyOn||!tyStart)return;const typed=document.getElementById('txi').value;const el=(Date.now()-tyStart)/60000;const wpm=el>0?Math.round(typed.length/5/el):0;document.getElementById('wpm').textContent=wpm;let ok=0;for(let i=0;i<Math.min(typed.length,TXT.length);i++)if(typed[i]===TXT[i])ok++;const ac=typed.length?Math.round(ok/typed.length*100):100;document.getElementById('acc').textContent=ac;let h='';for(let i=0;i<TXT.length;i++){const c=TXT[i]==='<'?'&lt;':TXT[i]==='>'?'&gt;':TXT[i];if(i<typed.length)h+=typed[i]===TXT[i]?'<span class="ty">'+c+'</span>':'<span class="er">'+c+'</span>';else if(i===typed.length)h+='<span class="cu">'+c+'</span>';else h+=c}document.getElementById('txd').innerHTML=h;if(typed.length>=TXT.length){tyOn=false;SES.tasks.typing={wpm,accuracy:ac,backspaces:BSC,dur:Date.now()-tyStart,iki_mean:avg(IKI),iki_std:sd(IKI),pauses500:IKI.filter(x=>x>500).length};document.getElementById('tybtn').textContent='✓ Готово';feed('Печать: '+wpm+'WPM acc='+ac+'%','k');setTimeout(()=>go('mouse'),1000)}}
+
+function startMou(){if(mouOn)return;mouOn=true;mtCnt=0;mtMiss=0;htimes=[];seg=[];document.getElementById('moubtn').disabled=true;document.getElementById('moubtn').textContent='Задача...';document.getElementById('mhint').style.display='none';document.getElementById('mtt').style.display='flex';setRec(true);feed('Задача мыши начата','mo');
+  document.getElementById('mtf').addEventListener('click', hitT);
+  placeT()}
+
+function placeT(){if(mtCnt>=20){finMou();return}const f=document.getElementById('mtf'),t=document.getElementById('mtt');const x=30+Math.random()*(f.offsetWidth-60),y=30+Math.random()*(f.offsetHeight-60);t.style.left=x+'px';t.style.top=y+'px';t.classList.remove('ck');mtTime=Date.now();seg=[];document.getElementById('tcnt').textContent=mtCnt}
+
+function hitT(e){
+  if(!mouOn)return;
+  const t=document.getElementById('mtt');
+  const tr=t.getBoundingClientRect();
+  // центр цели в абсолютных координатах экрана
+  const cx=tr.left+tr.width/2;
+  const cy=tr.top+tr.height/2;
+  // клик в абсолютных координатах экрана
+  const dist=Math.sqrt((e.clientX-cx)**2+(e.clientY-cy)**2);
+  const radius=tr.width/2;
+  const ht=Date.now()-mtTime;
+  if(dist<=radius){
+    mtCnt++;htimes.push(ht);t.classList.add('ck');
+    SES.events.clicks.push({t:Date.now(),hit:true,rt:ht,n:mtCnt});
+    feed('Цель #'+mtCnt+' — '+ht+'мс','mo');
+    document.getElementById('reac').textContent=Math.round(avg(htimes));
+    document.getElementById('tcnt').textContent=mtCnt;
+    if(seg.length>1)document.getElementById('str').textContent=Math.round(straight(seg)*100);
+    setTimeout(placeT,200);upd();
+  }else{
+    mtMiss++;document.getElementById('mss').textContent=mtMiss;
+    SES.events.clicks.push({t:Date.now(),hit:false,d:Math.round(dist)});
+  }
+}
+
+function straight(pts){if(pts.length<2)return 1;const f=pts[0],l=pts[pts.length-1];const dd=Math.sqrt((l.x-f.x)**2+(l.y-f.y)**2);let pd=0;for(let i=1;i<pts.length;i++)pd+=Math.sqrt((pts[i].x-pts[i-1].x)**2+(pts[i].y-pts[i-1].y)**2);return pd>0?Math.min(1,dd/pd):1}
+function finMou(){mouOn=false;document.getElementById('mtf').removeEventListener('click',hitT);SES.tasks.mouse={hits:mtCnt,misses:mtMiss,rt_mean:avg(htimes),rt_std:sd(htimes),ms_mean:avg(speeds),ms_std:sd(speeds.slice(-50)),total_ev:SES.events.mouse.length};document.getElementById('moubtn').textContent='✓ Готово';document.getElementById('mtt').style.display='none';feed('Мышь: '+mtCnt+'/20','mo');setTimeout(buildRes,700);setTimeout(()=>go('results'),900)}
+
+document.addEventListener('mousemove',e=>{const now=Date.now();if(lmp&&lmt){const dx=e.clientX-lmp.x,dy=e.clientY-lmp.y,dt=now-lmt;if(dt>0){const sp=Math.sqrt(dx*dx+dy*dy)/dt*1000;speeds.push(sp);spBuf.push(sp);if(spBuf.length>20)spBuf.shift();updChart();document.getElementById('fms').textContent=Math.round(sd(speeds.slice(-30)))+' px/s';document.getElementById('trem').textContent=Math.round(sd(speeds.slice(-30)))}}if(rec){SES.events.mouse.push({t:now,x:e.clientX,y:e.clientY});if(mouOn)seg.push({x:e.clientX,y:e.clientY,t:now});if(blOn){const f=document.getElementById('blf'),r=f.getBoundingClientRect();if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom&&tc++%6===0){const d=document.createElement('div');d.className='mtrail';d.style.left=(e.clientX-r.left)+'px';d.style.top=(e.clientY-r.top)+'px';f.appendChild(d);setTimeout(()=>{if(d.parentNode)d.parentNode.removeChild(d)},900)}}}lmp={x:e.clientX,y:e.clientY};lmt=now;upd()});
+function updChart(){const ch=document.getElementById('spch'),max=Math.max(...spBuf,1),bars=ch.querySelectorAll('.cb');spBuf.forEach((s,i)=>{if(bars[i])bars[i].style.height=Math.max(2,s/max*52)+'px'})}
+function buildRes(){const p=SES.participant;document.getElementById('rprf').textContent=p.nickname+', '+p.age+' лет';const l=SES.labels;document.getElementById('rmood').textContent='Стресс:'+l.stress+' Энергия:'+l.energy+' Фокус:'+l.focus;if(SES.tasks.typing){const t=SES.tasks.typing;document.getElementById('rtyp').textContent=t.wpm+'WPM acc='+t.accuracy+'%'}if(SES.tasks.mouse){const m=SES.tasks.mouse;document.getElementById('rmou').textContent=m.hits+'/20 реакция='+Math.round(m.rt_mean)+'мс'}SES.features=compFeat();document.getElementById('epv').textContent=JSON.stringify(SES,null,2).substr(0,600)+'\n...'}
+function compFeat(){const f={};if(IKI.length){f.iki_mean=avg(IKI);f.iki_std=sd(IKI);f.iki_cv=f.iki_std/f.iki_mean;f.pauses_500=IKI.filter(x=>x>500).length}if(SES.tasks.typing){f.wpm=SES.tasks.typing.wpm;f.accuracy=SES.tasks.typing.accuracy;f.backspace_rate=BSC/Math.max(1,SES.events.keyboard.length)}if(speeds.length){f.ms_mean=avg(speeds);f.ms_std=sd(speeds);f.ms_cv=f.ms_std/Math.max(1,f.ms_mean)}if(SES.tasks.mouse){f.rt_mean=SES.tasks.mouse.rt_mean;f.rt_std=SES.tasks.mouse.rt_std;f.miss_rate=mtMiss/20}if(SES.tasks.baseline_iki&&f.iki_mean)f.iki_ratio=f.iki_mean/SES.tasks.baseline_iki;if(SES.tasks.baseline_ms&&f.ms_mean)f.ms_ratio=f.ms_mean/SES.tasks.baseline_ms;return f}
+function dlJSON(){SES.features=compFeat();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(SES,null,2)],{type:'application/json'}));a.download='blab_'+SES.id+'.json';a.click()}
+function dlCSV(){SES.features=compFeat();const f=SES.features,l=SES.labels,p=SES.participant;const h=['id','nick','age','hand','sleep','caff','stress','energy','focus','iki_mean','iki_std','iki_cv','pauses500','wpm','acc','bs_rate','ms_mean','ms_std','rt_mean','miss_rate','iki_ratio','ms_ratio'];const v=[SES.id,p.nickname,p.age,p.handedness,p.sleep,p.caffeine,l.stress,l.energy,l.focus,f.iki_mean?.toFixed(1),f.iki_std?.toFixed(1),f.iki_cv?.toFixed(3),f.pauses_500,f.wpm,f.accuracy,f.backspace_rate?.toFixed(3),f.ms_mean?.toFixed(1),f.ms_std?.toFixed(1),f.rt_mean?.toFixed(1),f.miss_rate?.toFixed(3),f.iki_ratio?.toFixed(3),f.ms_ratio?.toFixed(3)];const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([h.join(',')+'\n'+v.join(',')],{type:'text/csv'}));a.download='blab_'+SES.id+'.csv';a.click()}
+function resetApp(){if(confirm('Начать новую сессию?'))location.reload()}
+
+document.getElementById('sid').textContent=SES.id.substr(0,10);
+for(let i=0;i<20;i++){const b=document.createElement('div');b.className='cb';b.style.height='2px';document.getElementById('spch').appendChild(b)}
+feed('Система инициализирована');
+</script>
